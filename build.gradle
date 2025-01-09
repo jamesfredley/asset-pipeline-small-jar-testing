@@ -61,6 +61,11 @@ dependencies {
     testImplementation "org.grails:grails-gorm-testing-support"
     testImplementation "org.grails:grails-web-testing-support"
     testImplementation "org.spockframework:spock-core"
+
+    // Version must be specified even though it is defined in asset-pipeline-core pom
+    providedRuntime "org.graalvm.sdk:graal-sdk:$graalvmVersion"
+    providedRuntime "org.graalvm.js:js:$graalvmVersion"
+    providedRuntime "org.graalvm.js:js-scriptengine:$graalvmVersion"
 }
 
 compileJava.options.release = 21
@@ -81,4 +86,10 @@ assets {
             'webjars/bootstrap-icons/*/font/bootstrap-icons.css',
             'webjars/bootstrap-icons/*/font/fonts/*',
     ]
+}
+
+bootWar {
+    // sets providedClasspath to an empty list so that the providedRuntime
+    // dependencies are not included in the war under WEB-INF/lib-provided
+    providedClasspath = project.files([])
 }
