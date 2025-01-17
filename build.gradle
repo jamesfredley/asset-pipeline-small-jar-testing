@@ -62,10 +62,9 @@ dependencies {
     testImplementation "org.grails:grails-web-testing-support"
     testImplementation "org.spockframework:spock-core"
 
-    // Version must be specified even though it is defined in asset-pipeline-core
-    developmentOnly "org.graalvm.sdk:graal-sdk:$graalvmVersion"
-    developmentOnly "org.graalvm.js:js:$graalvmVersion"
-    developmentOnly "org.graalvm.js:js-scriptengine:$graalvmVersion"
+    developmentOnly "org.graalvm.sdk:graal-sdk"
+    developmentOnly "org.graalvm.js:js"
+    developmentOnly "org.graalvm.js:js-scriptengine"
 }
 
 compileJava.options.release = 21
