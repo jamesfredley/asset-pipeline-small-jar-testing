@@ -13,7 +13,7 @@ plugins {
     id "groovy"
     id "war"
     id "idea"
-    id "com.bertramlabs.asset-pipeline" version "5.0.5"
+    id "com.bertramlabs.asset-pipeline" version "$assetPipelineVersion"
     id "eclipse"
 }
 
@@ -61,11 +61,14 @@ dependencies {
     testImplementation "org.grails:grails-gorm-testing-support"
     testImplementation "org.grails:grails-web-testing-support"
     testImplementation "org.spockframework:spock-core"
+}
 
-    // Version must be specified even though it is defined in asset-pipeline-core pom
-    providedRuntime "org.graalvm.sdk:graal-sdk:$graalvmVersion"
-    providedRuntime "org.graalvm.js:js:$graalvmVersion"
-    providedRuntime "org.graalvm.js:js-scriptengine:$graalvmVersion"
+// exclude org.graalvm dependencies which are required by asset-pipeline-core
+// for bootRun but are not required in the deployed war/jar
+tasks.named { it in ['bootWar', 'bootJar'] }.configureEach {
+    classpath = classpath.findAll {
+        !it.toString().contains('org.graalvm.')
+    }
 }
 
 compileJava.options.release = 21
@@ -73,6 +76,7 @@ compileJava.options.release = 21
 tasks.withType(Test) {
     useJUnitPlatform()
 }
+
 assets {
     excludes = [
             'webjars/jquery/**',
@@ -86,10 +90,4 @@ assets {
             'webjars/bootstrap-icons/*/font/bootstrap-icons.css',
             'webjars/bootstrap-icons/*/font/fonts/*',
     ]
-}
-
-bootWar {
-    // sets providedClasspath to an empty list so that the providedRuntime
-    // dependencies are not included in the war under WEB-INF/lib-provided
-    providedClasspath = project.files([])
 }
