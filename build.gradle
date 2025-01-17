@@ -65,7 +65,7 @@ dependencies {
 
 // exclude org.graalvm dependencies which are required by asset-pipeline-core
 // for bootRun but are not required in the deployed war/jar
-tasks.named { it in ['bootWar', 'bootJar'] }.configureEach {
+tasks.named { it in ['bootWar', 'bootJar', 'war'] }.configureEach {
     classpath = classpath.findAll {
         !it.toString().contains('org.graalvm.')
     }
